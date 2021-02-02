@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+  <head>
+    <title>Groundhog Day!</title>
+    <meta charset="utf-8" />
+    <meta name="author" content="Tim Schoof" />
+    <meta name="date" content="2021-02-02" />
+    <script src="Schoof_RLadiesTC_files/header-attrs-2.6/header-attrs.js"></script>
+    <link href="Schoof_RLadiesTC_files/remark-css-0.0.1/default.css" rel="stylesheet" />
+    <link href="Schoof_RLadiesTC_files/remark-css-0.0.1/rladies.css" rel="stylesheet" />
+    <link href="Schoof_RLadiesTC_files/remark-css-0.0.1/rladies-fonts.css" rel="stylesheet" />
+  </head>
+  <body>
+    <textarea id="source">
+class: center, middle, inverse, title-slide
+
+# Groundhog Day!
+## Getting a little more reproducibile every day
+### Tim Schoof
+### 02/02/2021
+
+---
+
+
+
+
+
+background-image: url("https://media.giphy.com/media/gdUVz1Z6jpMk0/giphy.gif")
+background-position: 50% 50%
+class: center, inverse
+
+# Happy Groundhog day 🥳
+
+---
+
+background-image: url("https://media.giphy.com/media/S9crjCfQXC78ST61iv/giphy.gif")
+background-position: 50% 50%
+class: center
+
+# Reproducibility
+
+---
+
+class: center 
+
+# Where I started...
+
+&lt;img src="messy.jpg" width="400" height="400"/&gt;
+
+I try to be a little less disorganized every day...
+
+---
+
+# Main challenges for the user
+
+.pull-left[
+
+&lt;img src="https://media.giphy.com/media/xT9IgIc0lryrxvqVGM/giphy.gif" width="280" height="280" /&gt;
+
+The code simply won't run]
+
+.pull-right[
+
+
+&lt;img src="https://media.giphy.com/media/3o6MbbwX2g2GA4MUus/giphy.gif" width="280" height="280" /&gt; 
+
+The user has no idea where to start]
+
+---
+
+# Making sure your code actually runs
+
+Why might your fully functioning code not run?
+- Time! Things change
+- Different system setup
+  - R packages (and dependencies)
+  - R version
+  - Operating System
+  
+How much of this you want to control depends on:
+- Your audience
+- How users will interface with your code
+- The lifetime of your project/code
+- Your comfort level 
+
+---
+
+# Different versions of R packages 😑
+
+## groundhog 📦
+
+- Loads a package and its dependencies from CRAN on *any given date*
+
+- Different versions of a package are *automatically* installed *alongside* versions you may already have
+
+- Works within individual scripts (e.g., without .Proj files)
+
+
+```r
+install.packages("groundhog")
+
+library(groundhog)
+groundhog.day="2021-02-02"
+pkgs=c('dplyr','nlme','ggplot2')
+groundhog.library(pkgs, groundhog.day)
+```
+
+---
+
+# Different versions of R packages 😑
+
+## renv 📦
+
+- Records the version of R and R packages being used in a project
+- Provides tools for re-installing those versions
+
+
+```r
+install.packages("renv")
+
+renv::init() # initialize 
+
+# do some coding
+
+renv::snapshot() # save to lockfile
+```
+
+
+```r
+use renv::restore() # restore
+```
+
+---
+
+# Different R, RStudio, Operating Systems 😒
+
+&lt;br/&gt;
+&lt;br/&gt;
+
+.pull-left[
+* **Docker**
+  - Captures your virtual environment
+  - Computer inside your computer
+* **Binder**
+  - GitHub repo
+  - Launches RStudio server
+  - Live and interactive]
+
+.pull-right[![](docker.png)]
+
+---
+
+# Hole punch 📦
+
+- Reads contents of your R project on GitHub
+- Creates a DESCRIPTION file with all dependencies
+- Writes a Dockerfile
+- Adds a binder badge to your README
+- Builds a Docker image
+
+
+```r
+remotes::install_github("karthik/holepunch")
+
+library(holepunch)
+
+write_compendium_description(
+  package = "Compendium name", 
+  description = "Compendium description")
+
+write_dockerfile(maintainer = "your_name") 
+generate_badge() 
+build_binder()
+```
+
+[demo](https://github.com/karthik/binder-test)
+
+---
+
+# Understand your audience
+
+And meet them where they are!
+
+&lt;img src="https://media.giphy.com/media/ly8G39g1ujpNm/giphy.gif" width="250"/&gt;
+
+* What tools do they use? 
+  - R
+  - GitHub
+  - Docker
+* What is their comfort zone, how much are they willing to invest?
+* What do you want them to do with your code?
+  - Share an end-product, such as a paper + code
+  - Re-usable code for consistency across projects 
+  - Deep understanding of the code
+  - Ability to build on the code
+  - Remember what I was doing 6 months ago!!
+
+---
+
+# Documentation
+
+.pull-left[&lt;img src="https://media.giphy.com/media/xiAqCzbB3eZvG/giphy.gif" width="250" /&gt;]
+
+.pull-right[Make it easy for the user. 
+
+Lower the barrier.]
+
+&lt;br/&gt;
+
+* Comment your code
+* README on GitHub
+* Help the user understand where to start
+  - GitHub
+  - Binder
+  - Docker
+  - R and RStudio
+  - File structure (primary document)
+* Document functions and provide examples
+* Vignettes
+* Website
+
+---
+
+# Staying organized
+
+* Use a familiar / intuitive structure
+* Document as you go
+* Git commit often
+* Don't be too upset by some inevitable chaos in the process
+
+We can learn from the R package structure
+
+&lt;img src="messy_organized.jpg" /&gt;
+
+---
+
+# Create an R package 
+
+Package up your
+* code
+* documentation
+* data 
+
+It's surprisingly doable!
+[Chapter 2](https://r-pkgs.org/whole-game.html) of the R packages book is all you need 😄 
+
+&lt;br/&gt; 
+
+&lt;img src="Rpkg.jpg" /&gt;
+
+---
+
+# Extend this to a Research Compendium
+
+It's basically an R package with some extra folders
+
+&lt;img src="Compendium.jpg" /&gt;
+
+---
+
+# rrtools 📦
+
+Hand wavy steps:
+
+
+```r
+devtools::install_github("benmarwick/rrtools")
+
+create_compendium("~/Documents/MyCompendium")
+
+usethis::use_mit_license(copyright_holder = "My Name")
+rrtools::use_readme_rmd()
+rrtools::use_analysis()
+rrtools::use_dockerfile()
+```
+
+---
+
+# workflowr 📦
+
+- Provides a project template with organized sub-directories
+- Runs each analysis in an isolated R session
+- Creates a website to present your research results
+- Documents how to host your website for free 
+- Require git installed
+
+
+```r
+install.packages("workflowr")
+
+library("workflowr")
+
+wflow_start("myproject")
+wflow_build()
+
+# customize site: write Rmd
+
+wflow_build()
+wflow_publish("analysis/*", "Start my new project")
+```
+
+---
+
+# Stay focused
+
+When deciding what reproducible steps to take, keep in mind:
+
+* What is your goal?
+  - Share a final product
+  - Share code within your team
+  - Share just a single script
+  
+* Where is your user? 
+  - Be willing to meet them where they are
+  - Provide documentation to help get them where they need to be
+* Where are you?
+
+  - You don't have to do it all
+  - Try to be a little more reproducible with every project
+
+---
+
+# Resources
+
+* [Karthik Ram's 2019 RStudio conference talk](https://rstudio.com/resources/rstudioconf-2019/a-guide-to-modern-reproducible-data-science-with-r-karthik-ram/)
+* Marwick, B., Boettiger, C., Mullen, L. (2018). *Packaging Data Analytical Work Reproducibly Using R (and Friends).* Faculty of Science, Medicine and Health - Papers: part A. 5389
+* [R Packages book](https://r-pkgs.org/whole-game.html)
+* [Anna Krystalli's Research Compendium tutorial](https://annakrystalli.me/rrtools-repro-research/create-compendium.html)
+* [Blog post about groundhog package](http:\\datacolada.org/95)
+* [Creating vignettes](https://r-pkgs.org/vignettes.html)
+
+### Packages
+* [groundhog](www.groundhog.com)
+* [renv](https://rstudio.github.io/renv/)
+* [hole punch](https://karthik.github.io/holepunch/)
+* [rrtools](https://github.com/benmarwick/rrtools) 
+* [workflowr](https://jdblischak.github.io/workflowr/)
+
+---
+
+background-image: url("https://media.giphy.com/media/TIhCRE9RVPlS0/giphy.gif")
+background-position: 50% 35%
+class: center, inverse
+
+# Thanks!
+&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;&lt;br/&gt;
+
+&lt;!-- Slides created using [xaringan](https://github.com/yihui/xaringan), following Alison Hill's [tutorial](https://alison.rbind.io/post/2017-12-18-r-ladies-presentation-ninja/) --&gt;
+
+Get a copy of these slides at &lt;br/&gt; [github.com/timschoof/RLadiesTalk](https://github.com/timschoof/RLadiesTalk)
+    </textarea>
+<style data-target="print-only">@media screen {.remark-slide-container{display:block;}.remark-slide-scaler{box-shadow:none;}}</style>
+<script src="https://remarkjs.com/downloads/remark-latest.min.js"></script>
+<script>var slideshow = remark.create({
+"highlightLines": true
+});
+if (window.HTMLWidgets) slideshow.on('afterShowSlide', function (slide) {
+  window.dispatchEvent(new Event('resize'));
+});
+(function(d) {
+  var s = d.createElement("style"), r = d.querySelector(".remark-slide-scaler");
+  if (!r) return;
+  s.type = "text/css"; s.innerHTML = "@page {size: " + r.style.width + " " + r.style.height +"; }";
+  d.head.appendChild(s);
+})(document);
+
+(function(d) {
+  var el = d.getElementsByClassName("remark-slides-area");
+  if (!el) return;
+  var slide, slides = slideshow.getSlides(), els = el[0].children;
+  for (var i = 1; i < slides.length; i++) {
+    slide = slides[i];
+    if (slide.properties.continued === "true" || slide.properties.count === "false") {
+      els[i - 1].className += ' has-continuation';
+    }
+  }
+  var s = d.createElement("style");
+  s.type = "text/css"; s.innerHTML = "@media print { .has-continuation { display: none; } }";
+  d.head.appendChild(s);
+})(document);
+// delete the temporary CSS (for displaying all slides initially) when the user
+// starts to view slides
+(function() {
+  var deleted = false;
+  slideshow.on('beforeShowSlide', function(slide) {
+    if (deleted) return;
+    var sheets = document.styleSheets, node;
+    for (var i = 0; i < sheets.length; i++) {
+      node = sheets[i].ownerNode;
+      if (node.dataset["target"] !== "print-only") continue;
+      node.parentNode.removeChild(node);
+    }
+    deleted = true;
+  });
+})();
+(function() {
+  "use strict"
+  // Replace <script> tags in slides area to make them executable
+  var scripts = document.querySelectorAll(
+    '.remark-slides-area .remark-slide-container script'
+  );
+  if (!scripts.length) return;
+  for (var i = 0; i < scripts.length; i++) {
+    var s = document.createElement('script');
+    var code = document.createTextNode(scripts[i].textContent);
+    s.appendChild(code);
+    var scriptAttrs = scripts[i].attributes;
+    for (var j = 0; j < scriptAttrs.length; j++) {
+      s.setAttribute(scriptAttrs[j].name, scriptAttrs[j].value);
+    }
+    scripts[i].parentElement.replaceChild(s, scripts[i]);
+  }
+})();
+(function() {
+  var links = document.getElementsByTagName('a');
+  for (var i = 0; i < links.length; i++) {
+    if (/^(https?:)?\/\//.test(links[i].getAttribute('href'))) {
+      links[i].target = '_blank';
+    }
+  }
+})();
+// adds .remark-code-has-line-highlighted class to <pre> parent elements
+// of code chunks containing highlighted lines with class .remark-code-line-highlighted
+(function(d) {
+  const hlines = d.querySelectorAll('.remark-code-line-highlighted');
+  const preParents = [];
+  const findPreParent = function(line, p = 0) {
+    if (p > 1) return null; // traverse up no further than grandparent
+    const el = line.parentElement;
+    return el.tagName === "PRE" ? el : findPreParent(el, ++p);
+  };
+
+  for (let line of hlines) {
+    let pre = findPreParent(line);
+    if (pre && !preParents.includes(pre)) preParents.push(pre);
+  }
+  preParents.forEach(p => p.classList.add("remark-code-has-line-highlighted"));
+})(document);</script>
+
+<script>
+slideshow._releaseMath = function(el) {
+  var i, text, code, codes = el.getElementsByTagName('code');
+  for (i = 0; i < codes.length;) {
+    code = codes[i];
+    if (code.parentNode.tagName !== 'PRE' && code.childElementCount === 0) {
+      text = code.textContent;
+      if (/^\\\((.|\s)+\\\)$/.test(text) || /^\\\[(.|\s)+\\\]$/.test(text) ||
+          /^\$\$(.|\s)+\$\$$/.test(text) ||
+          /^\\begin\{([^}]+)\}(.|\s)+\\end\{[^}]+\}$/.test(text)) {
+        code.outerHTML = code.innerHTML;  // remove <code></code>
+        continue;
+      }
+    }
+    i++;
+  }
+};
+slideshow._releaseMath(document);
+</script>
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+(function () {
+  var script = document.createElement('script');
+  script.type = 'text/javascript';
+  script.src  = 'https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML';
+  if (location.protocol !== 'file:' && /^https?:/.test(script.src))
+    script.src  = script.src.replace(/^https?:/, '');
+  document.getElementsByTagName('head')[0].appendChild(script);
+})();
+</script>
+  </body>
+</html>
